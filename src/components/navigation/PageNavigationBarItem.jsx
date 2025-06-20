@@ -4,12 +4,13 @@ import { PAGE_ITEM_STYLES } from '../../styles/pageItemStyles';
 
 const PageNavigationBarItem = ({
   page,
-  state, // 'active' | 'focused' | 'default' | 'hover'
+  state,
   onClick,
-  onMouseEnter,
-  onMouseLeave,
-  onFocus,
-  onBlur,
+  draggable,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDrop,
 }) => {
   const style = PAGE_ITEM_STYLES[state] || PAGE_ITEM_STYLES.default;
   return (
@@ -17,10 +18,11 @@ const PageNavigationBarItem = ({
       className={`flex items-center px-4 py-2 rounded-lg transition outline-none ${style.container} ${style.border} ${style.ring}`}
       style={{ minWidth: 90 }}
       onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onFocus={onFocus}
-      onBlur={onBlur}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
       tabIndex={0}
     >
       <span className={`mr-2 ${style.icon}`}>{page.icon}</span>
@@ -33,10 +35,11 @@ PageNavigationBarItem.propTypes = {
   page: PropTypes.object.isRequired,
   state: PropTypes.oneOf(['active', 'focused', 'default', 'hover']),
   onClick: PropTypes.func,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onFocus: PropTypes.func,
-  onBlur: PropTypes.func,
+  draggable: PropTypes.bool,
+  onDragStart: PropTypes.func,
+  onDragEnd: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDrop: PropTypes.func,
 };
 
 export default PageNavigationBarItem;

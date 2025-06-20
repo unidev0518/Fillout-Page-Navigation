@@ -11,26 +11,31 @@ const PageNavigationBar = ({
   onAddPageEnd,
   onReorder,
 }) => {
-  const [hoverIdx, setHoverIdx] = useState(null);
-  const [focusIdx, setFocusIdx] = useState(null);
+  const [draggedIdx, setDraggedIdx] = useState(null);
 
   return (
     <div className="flex items-center bg-gray-100 p-4 shadow" style={{ width: '1240px' }}>
       {pages.map((page, idx) => {
+        // ...determine state as before...
         let state = 'default';
         if (selectedIdx === idx) state = 'active';
-        if (focusIdx === idx) state = 'focused';
-        if (hoverIdx === idx) state = 'hover';
+
         return (
           <React.Fragment key={idx}>
             <PageNavigationBarItem
               page={page}
               state={state}
               onClick={() => onSelect(idx)}
-              onMouseEnter={() => setHoverIdx(idx)}
-              onMouseLeave={() => setHoverIdx(null)}
-              onFocus={() => setFocusIdx(idx)}
-              onBlur={() => setFocusIdx(null)}
+              draggable
+              onDragStart={() => setDraggedIdx(idx)}
+              onDragEnd={() => setDraggedIdx(null)}
+              onDragOver={e => e.preventDefault()}
+              onDrop={() => {
+                if (draggedIdx !== null && draggedIdx !== idx) {
+                  onReorder(draggedIdx, idx);
+                }
+                setDraggedIdx(null);
+              }}
             />
             {idx < pages.length - 1 && (
               <AddPageButton onClick={() => onAddPage(idx)} />
